@@ -1,18 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="com.pallycon.exoplayersample.MainActivity">
 
     <TextView
+        android:id="@+id/signTextView"
+        android:layout_width="177dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center"
+        android:text="made by castis.kskim" />
+    <TextView
+        android:id="@+id/serverIpTextView"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="Server Address" />
+
+    <EditText
+        android:id="@+id/serverIpEditText"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:inputType="textPersonName"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@id/serverIpTextView"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/serverPortTextView"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/serverIpTextView"
+        android:gravity="center"
+        android:text="Server Port" />
+
+    <EditText
+        android:id="@+id/serverPortEditText"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/serverIpEditText"
+        android:layout_toRightOf="@id/serverPortTextView"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/playListTextView"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/serverPortTextView"
+        android:gravity="center"
+        android:text="FileName" />
+
+    <EditText
+        android:id="@+id/playListEditText"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/serverPortEditText"
+        android:layout_toRightOf="@id/serverPortTextView"
+        android:inputType="textPersonName"
+        android:text="" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:orientation="vertical"
+        android:layout_below="@id/playListTextView"
+        android:layout_width="200dp"
+        android:layout_height="100dp">
+        <RadioButton
+            android:layout_weight="1"
+            android:text="HTTP"
+            android:id="@+id/btn_radio_http"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content" />
+        <RadioButton
+            android:layout_weight="1"
+            android:text="HTTPS"
+            android:id="@+id/btn_radio_https"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/button_play"
+        android:layout_width="133dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="224dp"
+        android:layout_marginTop="207dp"
+        android:text="PLAY" />
+
+    <Button
+        android:id="@+id/button_clean1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="292dp"
+        android:text="wowza non-drm" />
 
-</android.support.constraint.ConstraintLayout>
+    <Button
+        android:id="@+id/button_clean2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_clean1"
+        android:text="akamai non-drm" />
+
+    <Button
+        android:id="@+id/button_drmtest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_clean2"
+        android:text="DRM(widevine) HTTP" />
+
+    <Button
+        android:id="@+id/button_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_drmtest"
+        android:text="CLEAR" />
+
+</RelativeLayout>

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SampleProject</string>
+    <string name="storage_permission_denied">Permission to access storage was denied</string>
 </resources>
