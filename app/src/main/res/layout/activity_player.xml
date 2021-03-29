@@ -1,17 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!-- Copyright (C) 2016 The Android Open Source Project
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-
-          http://www.apache.org/licenses/LICENSE-2.0
-
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
+<?xml version="1.0" encoding="UTF-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:id="@+id/root"
              android:focusable="true"
@@ -21,24 +8,103 @@
 
     <com.castis.castisplayer.CastisExoPlayerView
         android:id="@+id/player_view"
-        android:focusable="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="300dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:focusable="false" />
 
     <LinearLayout
-        android:id="@+id/controls_root"
+        android:id="@+id/layout_timeline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#88000000"
+        android:layout_below="@id/player_view"
         android:orientation="horizontal">
+        <TextView
+            android:id="@+id/textView_current"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-        <!--
-                <Button
-                    android:id="@+id/select_tracks_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/track_selection_title"
-                    android:enabled="false"/>
-        -->
+            android:text="0" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/" />
+        <TextView
+            android:id="@+id/textView_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0" />
     </LinearLayout>
+
+
+
+    <Button
+        android:id="@+id/button_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_timeline"
+        android:layout_marginStart="30dp"
+        android:focusable="true"
+        android:text="Play" />
+
+    <Button
+        android:id="@+id/button_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_timeline"
+        android:layout_toRightOf="@id/button_play"
+        android:layout_marginStart="30dp"
+        android:text="Pause" />
+
+    <Button
+        android:id="@+id/button_forward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/button_pause"
+        android:layout_below="@id/layout_timeline"
+        android:layout_marginStart="30dp"
+        android:text="Forward(10s)" />
+
+    <Button
+        android:id="@+id/button_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_timeline"
+        android:layout_toRightOf="@id/button_forward"
+        android:layout_marginStart="30dp"
+        android:text="Back(10s)" />
+    <Button
+        android:id="@+id/button_sec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_forward"
+        android:layout_marginStart="30dp"
+        android:text="seek(5sec)" />
+
+    <Button
+        android:id="@+id/button_33per"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_pause"
+        android:layout_toRightOf="@id/button_sec"
+        android:text="seek(33%)" />
+
+    <Button
+        android:id="@+id/button_66per"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_back"
+        android:layout_toRightOf="@id/button_33per"
+        android:text="seek(66%)" />
+
+    <Button
+        android:id="@+id/button_hide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_back"
+        android:layout_toRightOf="@id/button_66per"
+        android:layout_marginStart="30dp"
+        android:text="hide control" />
+
 </RelativeLayout>

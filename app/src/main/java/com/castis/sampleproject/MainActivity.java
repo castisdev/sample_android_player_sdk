@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private Button cleanContent1Button;
     private Button cleanContent2Button;
     private Button drmContentHttpButton;
+    private Button drmWithAdButton;
     private Button clearButton;
 
     @Override
@@ -39,10 +40,10 @@ public class MainActivity extends AppCompatActivity {
         serverAddressEditText = (EditText) findViewById(R.id.serverIpEditText);
         serverPortEditText = (EditText) findViewById(R.id.serverPortEditText);
         playListEditText = (EditText) findViewById(R.id.playListEditText);
-        playButton = (Button)findViewById(R.id.button_play);
-        btn_radio_http = (RadioButton)findViewById(R.id.btn_radio_http);
-        btn_radio_http.setChecked(true);
-        btn_radio_https = (RadioButton)findViewById(R.id.btn_radio_https);
+        playButton = (Button) findViewById(R.id.button_play);
+        btn_radio_http = (RadioButton) findViewById(R.id.btn_radio_http);
+        btn_radio_https = (RadioButton) findViewById(R.id.btn_radio_https);
+        btn_radio_https.setChecked(true);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -50,77 +51,117 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        cleanContent1Button = (Button)findViewById(R.id.button_clean1);
-        cleanContent2Button = (Button)findViewById(R.id.button_clean2);
-        drmContentHttpButton = (Button)findViewById(R.id.button_drmtest);
-        clearButton = (Button)findViewById(R.id.button_clear);
+        cleanContent1Button = (Button) findViewById(R.id.button_clean1);
+        cleanContent2Button = (Button) findViewById(R.id.button_clean2);
+        drmContentHttpButton = (Button) findViewById(R.id.button_drmtest);
+        drmWithAdButton = (Button) findViewById(R.id.drmWithAdButton);
+        clearButton = (Button) findViewById(R.id.button_clear);
 
         String savedAddress = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("beforeServerAddress", "");
         String savedPort = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("beforeServerPort", "");
         String savedFileName = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("beforeFileName", "");
         String savedContentId = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("beforeContentId", "");
-        if(savedAddress.isEmpty() == false ) {
+        if (savedAddress.isEmpty() == false) {
             serverAddressEditText.setText(savedAddress);
         }
-        if(savedPort.isEmpty() == false ) {
+        if (savedPort.isEmpty() == false) {
             serverPortEditText.setText(savedPort);
         }
-        if(savedFileName.isEmpty() == false ) {
+        if (savedFileName.isEmpty() == false) {
             playListEditText.setText(savedFileName);
         }
-        try {
-            playButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //content = arrContentGroup.get(groupPosition).arrContent.get(childPosition);
-                    Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
 
-                    String contentIdStr = "";
+                String contentIdStr = "";
 
-                    String playListFileNameStr = playListEditText.getText().toString();
-                    int dotIndex = playListFileNameStr.lastIndexOf(".");
-                    if ( playListFileNameStr.lastIndexOf("/") > 0 ) {
-                        contentIdStr = playListFileNameStr.substring(playListFileNameStr.lastIndexOf("/") + 1, dotIndex);
-                    } else {
-                        contentIdStr = playListFileNameStr.substring(0, dotIndex);
-                    }
-                    Log.i(TAG, "contentIdStr:" + contentIdStr);
-
-                    String serverAddressStr = serverAddressEditText.getText().toString();
-                    String serverPortStr = serverPortEditText.getText().toString();
-
-                    if ( serverAddressStr.length() == 0 || playListFileNameStr.length() == 0 ) {
-                        Toast.makeText(MainActivity.this, "input server IP and FileName", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    String playUriStr = "";
-                    String httpString = "";
-                    if ( btn_radio_http.isChecked() == true ) {
-                        httpString = "http://";
-                    } else {
-                        httpString = "https://";
-                    }
-                    if ( serverPortStr.length() == 0 ) {
-                        playUriStr = httpString + serverAddressStr + "/" + playListFileNameStr;
-                    } else {
-                        playUriStr = httpString + serverAddressStr + ":" + serverPortStr +"/" + playListFileNameStr;
-                    }
-                    Uri playUri = Uri.parse(playUriStr);
-                    intent.setData(playUri);
-                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("beforeServerAddress", serverAddressStr).commit();
-                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("beforeServerPort", serverPortStr).commit();
-                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("beforeFileName", playListFileNameStr).commit();
-                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("beforeContentId", contentIdStr).commit();
-                    startActivity(intent);
+                String playListFileNameStr = playListEditText.getText().toString();
+                int dotIndex = playListFileNameStr.lastIndexOf(".");
+                if (playListFileNameStr.lastIndexOf("/") > 0) {
+                    contentIdStr = playListFileNameStr.substring(playListFileNameStr.lastIndexOf("/") + 1, dotIndex);
+                } else {
+                    contentIdStr = playListFileNameStr.substring(0, dotIndex);
                 }
-            });
-        } catch (NetworkOnMainThreadException e) {
-            e.printStackTrace();
-            showSimpleDialog("Code Error", "you have got main thread network permission!");
-        } catch (Exception e){
-            e.printStackTrace();
-            showSimpleDialog("Some Error", e.getMessage());
-        }
+                Log.i(TAG, "contentIdStr:" + contentIdStr);
+
+                String serverAddressStr = serverAddressEditText.getText().toString();
+                String serverPortStr = serverPortEditText.getText().toString();
+
+                if (serverAddressStr.length() == 0 || playListFileNameStr.length() == 0) {
+                    Toast.makeText(MainActivity.this, "input server IP and FileName", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                String playUriStr = "";
+                String httpString = "";
+                if (btn_radio_http.isChecked() == true) {
+                    httpString = "http://";
+                } else {
+                    httpString = "https://";
+                }
+                if (serverPortStr.length() == 0) {
+                    playUriStr = httpString + serverAddressStr + "/" + playListFileNameStr;
+                } else {
+                    playUriStr = httpString + serverAddressStr + ":" + serverPortStr + "/" + playListFileNameStr;
+                }
+                Uri playUri = Uri.parse(playUriStr);
+                intent.setData(playUri);
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("beforeServerAddress", serverAddressStr).commit();
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("beforeServerPort", serverPortStr).commit();
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("beforeFileName", playListFileNameStr).commit();
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("beforeContentId", contentIdStr).commit();
+                startActivity(intent);
+            }
+        });
+
+        drmWithAdButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
+
+                String contentIdStr = "";
+
+                String playListFileNameStr = playListEditText.getText().toString();
+                int dotIndex = playListFileNameStr.lastIndexOf(".");
+                if (playListFileNameStr.lastIndexOf("/") > 0) {
+                    contentIdStr = playListFileNameStr.substring(playListFileNameStr.lastIndexOf("/") + 1, dotIndex);
+                } else {
+                    contentIdStr = playListFileNameStr.substring(0, dotIndex);
+                }
+                Log.i(TAG, "contentIdStr:" + contentIdStr);
+
+                String serverAddressStr = serverAddressEditText.getText().toString();
+                String serverPortStr = serverPortEditText.getText().toString();
+
+                if (serverAddressStr.length() == 0 || playListFileNameStr.length() == 0) {
+                    Toast.makeText(MainActivity.this, "input server IP and FileName", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                String playUriStr = "";
+                String httpString = "";
+                if (btn_radio_http.isChecked() == true) {
+                    httpString = "http://";
+                } else {
+                    httpString = "https://";
+                }
+                if (serverPortStr.length() == 0) {
+                    playUriStr = httpString + serverAddressStr + "/" + playListFileNameStr;
+                } else {
+                    playUriStr = httpString + serverAddressStr + ":" + serverPortStr + "/" + playListFileNameStr;
+                }
+                Uri playUri = Uri.parse(playUriStr);
+                intent.setData(playUri);
+                // for google ad
+                String example_google_ad_tag_lifestyle = "https://pubads.g.doubleclick.net/gampad/ads?iu=/21806146298/dliveplus_lifestyle1&description_url=http%3A%2F%2Fwww.dlive.kr%2Ffront%2Fdliveplus%2FFreeAction.do%3Fmethod%3Dlist%26sFirstClCode%3D06&env=vp&impl=s&correlator=&tfcd=0&npa=0&gdfp_req=1&output=vast&sz=640x480&unviewed_position_start=1&devt=stb";
+                intent.putExtra(PlayerActivity.AD_TAG_URL, example_google_ad_tag_lifestyle);
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("beforeServerAddress", serverAddressStr).commit();
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("beforeServerPort", serverPortStr).commit();
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("beforeFileName", playListFileNameStr).commit();
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("beforeContentId", contentIdStr).commit();
+                startActivity(intent);
+            }
+        });
 
         cleanContent1Button.setOnClickListener(new View.OnClickListener() {
             @Override
