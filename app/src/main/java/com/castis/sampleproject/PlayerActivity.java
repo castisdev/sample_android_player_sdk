@@ -62,7 +62,11 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
     //timeline
     private TextView textView_current;
+    private TextView textView_buffer;
     private TextView textView_duration;
+    private TextView textView_current_ms;
+    private TextView textView_buffer_ms;
+    private TextView textView_duration_ms;
 
     //sample buttons
     private Button playButton;
@@ -185,7 +189,12 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         button_hide = (Button) findViewById(R.id.button_hide);
 
         textView_current = (TextView) findViewById(R.id.textView_current);
+        textView_buffer = (TextView) findViewById(R.id.textView_buffer);
         textView_duration = (TextView) findViewById(R.id.textView_duration);
+        textView_current_ms = (TextView) findViewById(R.id.textView_currentms);
+        textView_buffer_ms = (TextView) findViewById(R.id.textView_buffer_ms);
+        textView_duration_ms = (TextView) findViewById(R.id.textView_durationms);
+
 
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -251,10 +260,12 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void run() {
                 if (player != null) {
-                    int positionSec = player.getCurrentPositionSec();
-                    int durationSec = player.getDurationSec();
-                    textView_duration.setText(String.valueOf(durationSec));
-                    textView_current.setText(String.valueOf(positionSec));
+                    textView_duration.setText(String.valueOf(player.getDurationSec()));
+                    textView_buffer.setText(String.valueOf(player.getBufferedPositionSec()));
+                    textView_current.setText(String.valueOf(player.getCurrentPositionSec()));
+                    textView_current_ms.setText(String.valueOf(player.getCurrentPosition()));
+                    textView_buffer_ms.setText(String.valueOf(player.getBufferedPosition()));
+                    textView_duration_ms.setText(String.valueOf(player.getDuration()));
                     timeCheckHandler.postDelayed(this, 1000);
                 }
             }

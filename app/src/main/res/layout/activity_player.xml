@@ -31,7 +31,42 @@
             android:layout_height="wrap_content"
             android:text="/" />
         <TextView
+            android:id="@+id/textView_buffer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/" />
+        <TextView
             android:id="@+id/textView_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0" />
+
+        <TextView
+            android:id="@+id/textView_currentms"
+            android:layout_marginLeft="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="0" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/" />
+        <TextView
+            android:id="@+id/textView_buffer_ms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/" />
+        <TextView
+            android:id="@+id/textView_durationms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0" />
