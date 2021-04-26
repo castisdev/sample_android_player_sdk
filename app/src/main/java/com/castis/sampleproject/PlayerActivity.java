@@ -67,6 +67,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private TextView textView_current_ms;
     private TextView textView_buffer_ms;
     private TextView textView_duration_ms;
+    private TextView textView_isplayad;
 
     //sample buttons
     private Button playButton;
@@ -169,6 +170,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             String encToken = player.getEncryptionToken(videoUri.toString());
             drmSessionManager = wvmAgent.createDrmSessionManagerByToken(C.WIDEVINE_UUID, player.getDrmLicenseUrl(), videoUri, encToken);
             castisExoPlayerView.setFocusable(false);
+            player.setHighBitratePlay(true);
             player.initPlayer(this, castisExoPlayerView, drmSessionManager);
         } catch (PallyconDrmException e) {
             e.printStackTrace();
@@ -194,6 +196,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         textView_current_ms = (TextView) findViewById(R.id.textView_currentms);
         textView_buffer_ms = (TextView) findViewById(R.id.textView_buffer_ms);
         textView_duration_ms = (TextView) findViewById(R.id.textView_durationms);
+        textView_isplayad = (TextView) findViewById(R.id.textView_isplayad);
 
 
         playButton.setOnClickListener(new View.OnClickListener() {
@@ -266,6 +269,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                     textView_current_ms.setText(String.valueOf(player.getCurrentPosition()));
                     textView_buffer_ms.setText(String.valueOf(player.getBufferedPosition()));
                     textView_duration_ms.setText(String.valueOf(player.getDuration()));
+                    textView_isplayad.setText(String.valueOf(player.isPlayingAD()));
                     timeCheckHandler.postDelayed(this, 1000);
                 }
             }

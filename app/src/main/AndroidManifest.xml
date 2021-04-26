@@ -16,6 +16,7 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
+        <uses-library android:name="org.apache.http.legacy" android:required="false" />
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|keyboard|keyboardHidden">
