@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.NetworkOnMainThreadException;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
@@ -16,6 +17,13 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.pallycon.widevinelibrary.PallyconDrmException;
+import com.pallycon.widevinelibrary.PallyconWVMSDK;
+import com.pallycon.widevinelibrary.PallyconWVMSDKFactory;
+import com.pallycon.widevinelibrary.UnAuthorizedDeviceException;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "CASTIS_playerSDK_Main";
@@ -31,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private Button drmContentHttpButton;
     private Button drmWithAdButton;
     private Button clearButton;
+    private PallyconWVMSDK wvmAgent;
+    private Handler eventHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +61,23 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        try {
+            wvmAgent = PallyconWVMSDKFactory.getInstance(this);
+            wvmAgent.init(this, eventHandler, "LHV2", "UhKOG96Gl0BTxm7ocmZH0oyAhk2mA5n1");
+        } catch (PallyconDrmException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        } catch (UnAuthorizedDeviceException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
         cleanContent1Button = (Button) findViewById(R.id.button_clean1);
         cleanContent2Button = (Button) findViewById(R.id.button_clean2);
         drmContentHttpButton = (Button) findViewById(R.id.button_drmtest);
@@ -153,7 +180,8 @@ public class MainActivity extends AppCompatActivity {
                 Uri playUri = Uri.parse(playUriStr);
                 intent.setData(playUri);
                 // for google ad
-                String example_google_ad_tag_lifestyle = "https://pubads.g.doubleclick.net/gampad/ads?iu=/21806146298/dliveplus_lifestyle1&description_url=http%3A%2F%2Fwww.dlive.kr%2Ffront%2Fdliveplus%2FFreeAction.do%3Fmethod%3Dlist%26sFirstClCode%3D06&env=vp&impl=s&correlator=&tfcd=0&npa=0&gdfp_req=1&output=vast&sz=640x480&unviewed_position_start=1&devt=stb";
+                //String example_google_ad_tag_lifestyle = "https://pubads.g.doubleclick.net/gampad/ads?iu=/21806146298/dliveplus_lifestyle1&description_url=http%3A%2F%2Fwww.dlive.kr%2Ffront%2Fdliveplus%2FFreeAction.do%3Fmethod%3Dlist%26sFirstClCode%3D06&env=vp&impl=s&correlator=&tfcd=0&npa=0&gdfp_req=1&output=vast&sz=640x480&unviewed_position_start=1&devt=stb";
+                String example_google_ad_tag_lifestyle = "https://pubads.g.doubleclick.net/gampad/ads?iu=/21806146298/dliveplus_variaty1&description_url=http%3A%2F%2Fwww.dlive.kr%2Ffront%2Fdliveplus%2FFreeAction.do%3Fmethod%3Dlist%26sFirstClCode%3D02&env=vp&impl=s&correlator=&tfcd=0&npa=0&gdfp_req=1&output=vast&sz=640x480&unviewed_position_start=1&devt=stb";
                 intent.putExtra(PlayerActivity.AD_TAG_URL, example_google_ad_tag_lifestyle);
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("beforeServerAddress", serverAddressStr).commit();
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("beforeServerPort", serverPortStr).commit();

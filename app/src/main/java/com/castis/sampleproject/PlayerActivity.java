@@ -166,7 +166,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         try {
             wvmAgent = PallyconWVMSDKFactory.getInstance(this);
             wvmAgent.setPallyconEventListener(pallyconEventListener);
-            wvmAgent.init(this, new Handler(), player.getSiteId(), player.getSiteKey());
             String encToken = player.getEncryptionToken(videoUri.toString());
             drmSessionManager = wvmAgent.createDrmSessionManagerByToken(C.WIDEVINE_UUID, player.getDrmLicenseUrl(), videoUri, encToken);
             castisExoPlayerView.setFocusable(false);
