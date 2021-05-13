@@ -56,7 +56,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private CastisPlayer player;
     private Uri videoUri;
     private PallyconWVMSDK wvmAgent;
-    private DrmSessionManager<FrameworkMediaCrypto> drmSessionManager;
+    private DrmSessionManager drmSessionManager;
     final Handler timeCheckHandler = new Handler();
     private String adTagUrl;
 
@@ -82,8 +82,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     // refer to the ExoPlayer guide
     private Player.EventListener playerEventListener = new Player.DefaultEventListener() {
         @Override
-        public void onTimelineChanged(Timeline timeline, Object manifest) {
-            Log.d(TAG, "onTimelineChanged()!!");
+        public void onTimelineChanged(Timeline timeline, int reason) {
+            Log.d(TAG, "onTimelineChanged()!! reason:" + reason);
         }
 
         @Override
@@ -115,7 +115,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                     break;
                 case ExoPlayer.STATE_ENDED:
                     Log.i(TAG, "ExoPlayer.STATE_ENDED(" + playbackState + ")");
-                    player.seekToSec(0);
                     break;
                 default:
                     Log.i(TAG, "ExoPlayer.default(" + playbackState + ")");
