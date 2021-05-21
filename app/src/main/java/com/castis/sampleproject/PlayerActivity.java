@@ -22,13 +22,10 @@ import com.castis.castisplayer.CastisPlayer;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
-import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.pallycon.widevinelibrary.DatabaseDecryptException;
 import com.pallycon.widevinelibrary.DetectedDeviceTimeModifiedException;
@@ -38,8 +35,6 @@ import com.pallycon.widevinelibrary.PallyconServerResponseException;
 import com.pallycon.widevinelibrary.PallyconWVMSDK;
 import com.pallycon.widevinelibrary.PallyconWVMSDKFactory;
 import com.pallycon.widevinelibrary.UnAuthorizedDeviceException;
-
-import org.json.JSONException;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -106,8 +101,24 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                     Log.i(TAG, "ExoPlayer.STATE_BUFFERING(" + playbackState + ")");
                     break;
                 case ExoPlayer.STATE_READY:
+                    // update timeline per sec
+                    timeCheckHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (player != null) {
+                                textView_duration.setText(String.valueOf(player.getDurationSec()));
+                                textView_buffer.setText(String.valueOf(player.getBufferedPositionSec()));
+                                textView_current.setText(String.valueOf(player.getCurrentPositionSec()));
+                                textView_current_ms.setText(String.valueOf(player.getCurrentPosition()));
+                                textView_buffer_ms.setText(String.valueOf(player.getBufferedPosition()));
+                                textView_duration_ms.setText(String.valueOf(player.getDuration()));
+                                textView_isplayad.setText(String.valueOf(player.isPlayingAD()));
+                                timeCheckHandler.postDelayed(this, 1000);
+                            }
+                        }
+                    }, 1000);
                     if (playWhenReady) {
-                        Log.i(TAG, "ExoPlayer.STATE_READY(" + playbackState + ")");
+                        Log.i(TAG, "ExoPlayer.STATE_READY(" + playbackState + ") isAD:" + player.isPlayingAD());
                     } else {
                         Log.i(TAG, "ExoPlayer.STATE_PAUSED(" + playbackState + ")");
                         pauseButton.requestFocus();
@@ -256,22 +267,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        // update timeline per sec
-        timeCheckHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (player != null) {
-                    textView_duration.setText(String.valueOf(player.getDurationSec()));
-                    textView_buffer.setText(String.valueOf(player.getBufferedPositionSec()));
-                    textView_current.setText(String.valueOf(player.getCurrentPositionSec()));
-                    textView_current_ms.setText(String.valueOf(player.getCurrentPosition()));
-                    textView_buffer_ms.setText(String.valueOf(player.getBufferedPosition()));
-                    textView_duration_ms.setText(String.valueOf(player.getDuration()));
-                    textView_isplayad.setText(String.valueOf(player.isPlayingAD()));
-                    timeCheckHandler.postDelayed(this, 1000);
-                }
-            }
-        }, 1000);
     }
 
     @Override
@@ -293,6 +288,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             } else {
                 player.play(videoUri.toString(), adTagUrl);
             }
+            player.hideController();
             playButton.requestFocus();
         } catch (CastisException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();

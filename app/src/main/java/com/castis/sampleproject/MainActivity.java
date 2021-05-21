@@ -198,7 +198,8 @@ public class MainActivity extends AppCompatActivity {
                 Random rand = new Random();
                 int randAdTagNumer = rand.nextInt(6);
                 String currentADTag = adtagList.get(randAdTagNumer);
-                intent.putExtra(PlayerActivity.AD_TAG_URL, currentADTag);
+                String errorADtag="https://pubads.g.doubleclick.net/gampad/ads?iu=/21806146298/dliveplus_entertainment1&description_url=http://www.dlive.kr/front/dliveplus/FreeAction.do?method=list&sFirstClCode=01&env=vp&impl=s&correlator=&tfcd=0&npa=0&gdfp_req=1&output=vast&sz=640x480&unviewed_position_start=1&devt=stb";
+                intent.putExtra(PlayerActivity.AD_TAG_URL, errorADtag);
                 Log.i(TAG, "currentADTag:" + currentADTag);
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("beforeServerAddress", serverAddressStr).commit();
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("beforeServerPort", serverPortStr).commit();
@@ -222,9 +223,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 btn_radio_https.setChecked(true);
-                serverAddressEditText.setText("dash.akamaized.net");
+                serverAddressEditText.setText("str-ott.dlive.kr");
                 serverPortEditText.setText("443");
-                playListEditText.setText("akamai/bbb_30fps/bbb_30fps.mpd");
+                playListEditText.setText("video/10000/10000.mpd");
             }
         });
         drmContentHttpButton.setOnClickListener(new View.OnClickListener() {
