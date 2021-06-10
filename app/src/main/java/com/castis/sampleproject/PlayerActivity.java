@@ -23,6 +23,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.source.TrackGroupArray;
@@ -90,17 +91,18 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         public void onLoadingChanged(boolean isLoading) {
             Log.d(TAG, "onLoadingChanged(" + isLoading + ")");
         }
-
         @Override
-        public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-            switch (playbackState) {
+        public void onPlaybackStateChanged(@Player.State int state) {
+            switch (state) {
                 case ExoPlayer.STATE_IDLE:
-                    Log.i(TAG, "ExoPlayer.STATE_IDLE(" + playbackState + ")");
+                    Log.i(TAG, "ExoPlayer.STATE_IDLE(" + state + ")");
                     break;
                 case ExoPlayer.STATE_BUFFERING:
-                    Log.i(TAG, "ExoPlayer.STATE_BUFFERING(" + playbackState + ")");
+                    Log.i(TAG, "ExoPlayer.STATE_BUFFERING(" + state + ")");
                     break;
                 case ExoPlayer.STATE_READY:
+                    SimpleExoPlayer sep = player.getExoPlayer();
+                    Log.i(TAG, "ExoPlayer.STATE_READY sep:" + sep.toString());
                     // update timeline per sec
                     timeCheckHandler.postDelayed(new Runnable() {
                         @Override
@@ -112,23 +114,19 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                                 textView_current_ms.setText(String.valueOf(player.getCurrentPosition()));
                                 textView_buffer_ms.setText(String.valueOf(player.getBufferedPosition()));
                                 textView_duration_ms.setText(String.valueOf(player.getDuration()));
-                                textView_isplayad.setText(String.valueOf(player.isPlayingAD()));
+                                textView_isplayad.setText(String.valueOf(player.isPlaying()));
                                 timeCheckHandler.postDelayed(this, 1000);
                             }
                         }
                     }, 1000);
-                    if (playWhenReady) {
-                        Log.i(TAG, "ExoPlayer.STATE_READY(" + playbackState + ") isAD:" + player.isPlayingAD());
-                    } else {
-                        Log.i(TAG, "ExoPlayer.STATE_PAUSED(" + playbackState + ")");
-                        pauseButton.requestFocus();
-                    }
+                    Log.i(TAG, "ExoPlayer.STATE_READY(" + state + ") isAD:" + player.isPlayingAD());
                     break;
                 case ExoPlayer.STATE_ENDED:
-                    Log.i(TAG, "ExoPlayer.STATE_ENDED(" + playbackState + ")");
+                    Log.i(TAG, "ExoPlayer.STATE_ENDED(" + state + ")");
+                    player.pause();
                     break;
                 default:
-                    Log.i(TAG, "ExoPlayer.default(" + playbackState + ")");
+                    Log.i(TAG, "ExoPlayer.default(" + state + ")");
             }
         }
 
@@ -177,6 +175,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             wvmAgent = PallyconWVMSDKFactory.getInstance(this);
             wvmAgent.setPallyconEventListener(pallyconEventListener);
             String encToken = player.getEncryptionToken(videoUri.toString());
+            player.setUseHttpsDRMRequest(true);
             drmSessionManager = wvmAgent.createDrmSessionManagerByToken(C.WIDEVINE_UUID, player.getDrmLicenseUrl(), videoUri, encToken);
             castisExoPlayerView.setFocusable(false);
             player.setHighBitratePlay(true);
